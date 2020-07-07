@@ -1,12 +1,23 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
+const fs = require('fs');
+
+const htmlFiles = fs
+  .readdirSync(path.join(__dirname, 'src'))
+  .filter(file => file.includes('.html'));
 
 module.exports = {
   entry: path.join(__dirname, 'src/index.js'),
   output: { publicPath: '/', path: path.join(__dirname, 'dist') },
   plugins: [
-    new HtmlWebpackPlugin({ template: path.join(__dirname, 'src/index.html') }),
+    ...htmlFiles.map(
+      htmlFile =>
+        new HtmlWebpackPlugin({
+          filename: path.join(__dirname, 'dist/' + htmlFile),
+          template: path.join(__dirname, 'src/' + htmlFile),
+        })
+    ),
     new MiniCssExtractPlugin({
       filename: 'style.css',
     }),
