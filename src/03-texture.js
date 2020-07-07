@@ -10,10 +10,11 @@ if (canvas) {
     const draw = regl({
       vert: `
       attribute vec2 a_position;
+      attribute vec2 a_texturePosition;
       varying vec2 v_uv;
 
       void main() {
-        v_uv = 0.5 + 0.5 * a_position;
+        v_uv = a_texturePosition;
         gl_Position = vec4(a_position, 0, 1);
       }
     `,
@@ -35,12 +36,17 @@ if (canvas) {
           [-1, Math.sin(tick * 0.005)],
           [Math.sin(tick * 0.006), 1],
         ],
+        a_texturePosition: [
+          [0.5, 0],
+          [0, 0.5],
+          [1, 1],
+        ],
       },
       count: 3,
     });
 
     regl.frame(() => {
-      regl.clear({ color: [0, 0, 0, 1] });
+      regl.clear({ color: [255, 255, 255, 1] });
       draw();
     });
   };
